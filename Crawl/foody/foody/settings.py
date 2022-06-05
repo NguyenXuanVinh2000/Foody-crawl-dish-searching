@@ -12,12 +12,27 @@ BOT_NAME = 'foody'
 SPIDER_MODULES = ['foody.spiders']
 NEWSPIDER_MODULE = 'foody.spiders'
 
+MYSQL_PASS = 'airflow'
+MYSQL_USER = 'root'
+MYSQL_DB = 'FOODY'
+MYSQL_HOST = '172.17.0.1'
+MYSQL_PORT = 3306
+MYSQL_CHARSET = 'utf8'
+USER_AGENT_LIST = [
+    "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.360",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:48.0) Gecko/20100101 Firefox/48.0"
+]
 
+LOG_STDOUT = True
+LOG_FILE = '/home/vinh/ProjectCty/Foody-crawl-dish-searching/Crawl/foody/foody/scrapy_log.txt'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'foody (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
+FEED_EXPORT_ENCODING = "utf-8"
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -44,9 +59,9 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'foody.middlewares.FoodySpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+    'foody.middlewares.FoodySpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -62,9 +77,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'foody.pipelines.FoodyPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'foody.pipelines.FoodyPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

@@ -4,7 +4,7 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
+import scrapy
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
@@ -101,3 +101,19 @@ class FoodyDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class RetryMiddleware(scrapy.downloadermiddlewares.retry.RetryMiddleware):
+
+    def process_response(self, request, response, spider):
+        """Attach a .retry() method to every response"""
+        response = super().process_response(request, response, spider)
+
+        def retry(**kwargs):
+            reason = kwargs.pop('reason', 'response_retry_called')
+            retryreq = request.replace(**kwargs)
+            return self._retry(retryreq, reason, spider)
+
+        if isinstance(response, scrapy.http.Response):
+            response.retry = retry
+
+        return response
