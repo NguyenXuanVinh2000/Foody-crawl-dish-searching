@@ -1,0 +1,19 @@
+numpy
+pandas
+scrapy
+elasticsearch==7.15.2
+requests
+fastapi
+SQLAlchemy
+uvicorn
+mysql
+mysql-connector-python-rf
+mysqlclient
+PyMySQL==1.0.2
+cryptography
+timeout-decorator==0.5.0
+apache-airflow-providers-elasticsearch
+apache-airflow ==2.2.4
+elasticsearch-dbapi
+elasticsearch-dsl>=5.0.0
+flask

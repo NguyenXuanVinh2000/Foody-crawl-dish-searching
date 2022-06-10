@@ -1,0 +1,19 @@
+FROM python:3.10.4
+
+WORKDIR /code
+
+EXPOSE 5000
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY ./templates /code/templates
+
+COPY ./app.py/ /code/
+
+ENTRYPOINT [ "flask"]
+
+CMD [ "run", "--host", "0.0.0.0" ]
+

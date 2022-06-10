@@ -1,0 +1,63 @@
+services:
+  # mysql:
+  #   container_name: vinh-mysql
+  #   image: mysql:5.7
+  #   command: 
+  #     --explicit_defaults_for_timestamp
+  #     --max_allowed_packet=325058560
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - ./mysql-init.sql:/tmp/mysql-init.sql
+  #     - my-db:/var/lib/mysql
+  #   environment:
+  #     MYSQL_ROOT_USER: airflow
+  #     MYSQL_ROOT_PASSWORD: airflow
+  #     MYSQL_USER: airflow
+  #     MYSQL_PASSWORD: airflow
+  #     MYSQL_DATABASE: airflow
+  #   healthcheck:
+  #     test: "/etc/init.d/mysql status"
+  #     interval: 2s
+  #     retries: 120
+  #   restart: always
+
+  # elasticsearch:
+  #   container_name: vinh-elasticsearch
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+  #   environment:
+  #     - discovery.type=single-node
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - bootstrap.memory_lock=true
+  #   ports:
+  #     - 9200:9200
+  #   volumes:
+  #     - data
+  #   networks:
+  #     - elastic
+  #   restart: always
+
+
+  fastapi:
+    container_name: vinh-fastapi
+    image: vinh-fastapi:latest
+    ports:
+      - "80:80"
+    networks:
+      - elastic
+    restart: always
+
+  # flask_web:
+  #   container_name: vinh-flask
+  #   image: vinh-flask:latest
+  #   ports:
+  #     - "5000:5000"
+  #   networks:
+  #     - elastic
+  #   restart: always
+
+volumes:
+  my-db:
+networks:
+  elastic:
+    driver: bridge

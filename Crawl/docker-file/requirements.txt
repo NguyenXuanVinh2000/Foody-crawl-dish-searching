@@ -1,8 +1,0 @@
-numpy
-pandas
-scrapy
-mysql
-mysql-connector-python-rf
-mysqlclient
-selenium
-retry

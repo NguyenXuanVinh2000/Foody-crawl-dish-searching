@@ -1,0 +1,5 @@
+services:  
+  flask_web:
+    image: vinh_flask:latest
+    ports:
+      - "5000:5000"

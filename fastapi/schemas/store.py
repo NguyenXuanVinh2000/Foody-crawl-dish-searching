@@ -3,8 +3,7 @@ from pydantic import BaseModel
 
 class Stores(BaseModel):
     drink_names: str
-    prices: int
-    statuss: str
+    prices: str
     ratings: str
     store_names: str
     address: str

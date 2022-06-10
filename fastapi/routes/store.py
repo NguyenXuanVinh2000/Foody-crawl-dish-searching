@@ -13,6 +13,11 @@ drinks = APIRouter()
 key = Fernet.generate_key()
 f = Fernet(key)
 
+@drinks.get("/drinks/all", tags=["drinks"], response_model=List[Stores],  description="Show all drink in database",
+)
+def get_all_drinks():
+    return conn.execute(stores.select()).fetchall()
+
 
 @drinks.get("/drinks/count", tags=["drinks"], response_model=StoresCount,  description="Total drink in database",
 )
@@ -54,15 +59,15 @@ def get_drink(drink_names: str, store_names: str):
 
 @drinks.post("/drinks", tags=["drinks"], response_model=Stores, description="Create a new drinks")
 def create_drinks(drink: Stores):
-    new_drink = {"drink_names": drink.drink_names, "prices": drink.prices, "statuss": drink.statuss, "ratings": drink.ratings, "store_names": drink.store_names, "address": drink.address }
+    new_drink = {"drink_names": drink.drink_names, "prices": drink.prices, "ratings": drink.ratings, "store_names": drink.store_names, "address": drink.address }
     result = conn.execute(stores.insert().values(new_drink))
     return conn.execute(stores.select().where(stores.c.drink_names == result.lastrowid)).first()
 
 
-@drinks.put("drinks/{drink_names}_{store_names}", tags=["drinks"], response_model=Stores, description="Update a drinks by drink_names, store_names")
-def update_drinks(drink: Stores, drink_names: str, store_names: str):
-    conn.execute(stores.update().values(drink_names=drink.drink_names, prices=drink.prices, statuss=drink.statuss, ratings=drink.ratings, store_names=drink.store_names, address=drink.address).where(stores.c.drink_names == drink_names).where(stores.c.store_names == store_names))
-    return conn.execute(stores.select().where(stores.c.drink_names == drink_names).where(stores.c.store_names == store_names)).first()
+# @drinks.put("drinks/update/{drink_names}_{store_names}", tags=["drinks"], response_model=Stores, description="Update a drinks by drink_names, store_names")
+# def update_drinks(drink: Stores, drink_names: str, store_names: str):
+#     conn.execute(stores.update().values(drink_names=drink.drink_names, prices=drink.prices, ratings=drink.ratings, store_names=drink.store_names, address=drink.address).where(stores.c.store_names == store_names).where(stores.c.drink_names == drink_names))
+#     return conn.execute(stores.select().where(stores.c.store_names == store_names).where(stores.c.drink_names == drink_names)).first()
 
 
 # @drinks.delete("/drink_names, store_names", tags=["drinks"], status_code=HTTP_204_NO_CONTENT)
