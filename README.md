@@ -1,4 +1,6 @@
 # Foody-crawl-dish-searching
+## Introduction
+    - Project DISH SEARCHING in foody.vn/da-nang
 ## STEP BY STEP:
     - pip3 install -r requirements.txt
     - docker build --tag (image name) in folder fastapi and Flask_web
