@@ -20,9 +20,11 @@ import scrapy
 import json
 import logging
 from foody.check_DB import check_data
+
 class FoodySpider(scrapy.Spider):
     name = "foody"
     start_urls = "https://gappapi.deliverynow.vn/api/delivery/get_browsing_ids"
+    
     def __init__(self):
         self.rating = None
         self.name_restaurant = None
@@ -35,6 +37,7 @@ class FoodySpider(scrapy.Spider):
             'x-foody-client-type': '1',
             'x-foody-client-version': '1',
         }
+    
     def start_requests(self):
         payload = {
             "sort_type":2,
@@ -47,6 +50,7 @@ class FoodySpider(scrapy.Spider):
                             headers=self.headers,
                             body=json.dumps(payload),
                             callback=self.parser_list_id)
+                            
     def parser_list_id(self,response):
         json_text_list_id_restaurant = response.text
         json_list_id_restaurant = json.loads(json_text_list_id_restaurant)
@@ -66,17 +70,14 @@ class FoodySpider(scrapy.Spider):
                                                         callback=self.parser_info_restaurant)
             yield request_info_restaurant
 
-    
-    
     def parser_info_restaurant(self,response):
         json_text_info_restaurant = response.text
         json_info_restaurant = json.loads(json_text_info_restaurant)
-
         self.name_restaurant = json_info_restaurant['reply']['delivery_detail']['name']
         self.address = json_info_restaurant['reply']['delivery_detail']['address']
         self.rating = json_info_restaurant['reply']['delivery_detail']['rating']['avg']
+
     def parser_info_dish(self,response):
-        api = 'http://0.0.0.0/drinks'
         json_text_list_info_dish = response.text
         json_list_info_dish = json.loads(json_text_list_info_dish)
         for info_dish_type in json_list_info_dish['reply']['menu_infos']:
@@ -90,11 +91,4 @@ class FoodySpider(scrapy.Spider):
                     item.add_value('ratings', str(self.rating))
                     item.add_value('store_names', str(self.name_restaurant))
                     item.add_value('address', str(self.address))
-                    data = {
-                            "drink_names": str(info_dish['name']),
-                            "prices": str(info_dish['price']['value']),
-                            "ratings": str(self.rating),
-                            "store_names": str(self.name_restaurant),
-                            "address": str(self.address)}
-                    requests.post(api, json=data)
                     yield item.load_item()
