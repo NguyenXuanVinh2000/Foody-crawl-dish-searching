@@ -1,5 +1,3 @@
-from crypt import methods
-import re
 from flask import Flask, render_template, request
 from elasticsearch import Elasticsearch
 
@@ -13,8 +11,20 @@ def search():
         data =[]
         drink_names = request.form['search']
         sort = request.form['drinks']
-        drink_names =  str(drink_names)
-        resp = es.search(index="store", size=50 ,body={"query": {"fuzzy": {'drink_names':drink_names}}})
+        resp = es.search(index="store", size=50 ,
+        body=
+{
+  "query": {    
+    "match": {
+      "drink_names": {
+        "query": drink_names,
+        "max_expansions": 3
+
+      }
+    }
+  }
+}
+                    )
         for hit in resp['hits']['hits']:
            data.append(hit["_source"])
         if sort == "price":

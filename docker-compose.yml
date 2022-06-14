@@ -21,7 +21,8 @@ services:
       interval: 2s
       retries: 120
     restart: always
-
+    networks:
+      - elastic
   elasticsearch:
     container_name: vinh-elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
@@ -60,4 +61,3 @@ volumes:
   my-db:
 networks:
   elastic:
-    driver: bridge
