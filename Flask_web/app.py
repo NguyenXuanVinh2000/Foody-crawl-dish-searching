@@ -11,19 +11,15 @@ def search():
         data =[]
         drink_names = request.form['search']
         sort = request.form['drinks']
-        resp = es.search(index="store", size=50 ,
-        body=
-{
-  "query": {    
-    "match": {
-      "drink_names": {
-        "query": drink_names,
-        "max_expansions": 3
-
-      }
-    }
-  }
-}
+        resp = es.search(index="store", size=50 ,query=
+            {    
+                "match": {
+                "drink_names": {
+                    "query": drink_names,
+                    "fuzziness": 1
+                }
+                }
+            }
                     )
         for hit in resp['hits']['hits']:
            data.append(hit["_source"])
