@@ -63,13 +63,16 @@ def create_drinks(drink: Stores):
     result = conn.execute(stores.insert().values(new_drink))
     return conn.execute(stores.select().where(stores.c.drink_names == result.lastrowid)).first()
 
-
-@drinks.put("drinks/update/{drink_names}_{store_names}", tags=["drinks"], response_model=Stores, description="Update a drinks by drink_names, store_names")
-def update_drinks(drink: Stores, drink_names: str, store_names: str):
-    new_drink = {"drink_names": drink.drink_names, "prices": drink.prices, "ratings": drink.ratings, "store_names": drink.store_names, "address": drink.address }
-    conn.execute(stores.update().values(new_drink).where(stores.c.store_names == store_names).where(stores.c.drink_names == drink_names))
-    return None
-
+@drinks.put("/drinks/update/{drink_names}_{store_names}", response_model=Stores, description="Update data")
+def update_drinks(drink_names: str, store_names: str, drink: Stores):
+    conn.execute(stores.update().values(
+    {   stores.c.drink_names: drink.drink_names, 
+        stores.c.prices: drink.prices, 
+        stores.c.ratings: drink.ratings, 
+        stores.c.store_names: drink.store_names, 
+        stores.c.address: drink.address }
+    ).where(stores.c.store_names == store_names).where(stores.c.drink_names == drink_names))
+    return conn.execute(stores.select().where(stores.c.drink_names == drink_names)).first()
 
 # @drinks.delete("/drink_names, store_names", tags=["drinks"], status_code=HTTP_204_NO_CONTENT)
 # def delete_drinks(drink_names: str,store_names: str ):
